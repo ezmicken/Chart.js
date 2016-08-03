@@ -270,7 +270,7 @@
 					var lastLabelWidth = this.ctx.measureText(this.ticks[this.ticks.length - 1]).width;
 
 					// Ensure that our ticks are always inside the canvas. When rotated, ticks are right aligned which means that the right padding is dominated
-					// by the font height 
+					// by the font height
 					var cosRotation = Math.cos(helpers.toRadians(this.labelRotation));
 					var sinRotation = Math.sin(helpers.toRadians(this.labelRotation));
 					this.paddingLeft = this.labelRotation !== 0 ? (cosRotation * firstLabelWidth) + 3 : firstLabelWidth / 2 + 3; // add 3 px to move away from canvas edges
@@ -342,7 +342,7 @@
 		// Used to get data value locations.  Value can either be an index or a numerical value
 		getPixelForValue: helpers.noop,
 
-		// Used for tick location, should 
+		// Used for tick location, should
 		getPixelForTick: function(index, includeOffset) {
 			if (this.isHorizontal()) {
 				var innerWidth = this.width - (this.paddingLeft + this.paddingRight);
@@ -432,6 +432,20 @@
 								this.ctx.lineTo(xLineValue, chartArea.bottom);
 							}
 
+							this.ctx.stroke();
+
+							if (this.options.marker) {
+								if (index === this.options.marker.index) {
+									this.ctx.save();
+									this.ctx.moveTo(xLineValue, chartArea.top);
+									this.ctx.lineTo(xLineValue, chartArea.bottom);
+									this.ctx.lineWidth = this.options.marker.width || this.ctx.lineWidth;
+									this.ctx.strokeStyle = this.options.marker.color || this.ctx.strokeStyle;
+									this.ctx.stroke();
+									this.ctx.restore();
+								}
+							}
+
 							// Need to stroke in the loop because we are potentially changing line widths & colours
 							this.ctx.stroke();
 						}
@@ -442,6 +456,13 @@
 							this.ctx.rotate(helpers.toRadians(this.labelRotation) * -1);
 							this.ctx.font = labelFont;
 							this.ctx.textAlign = (isRotated) ? "right" : "center";
+
+							if (this.options.marker) {
+								if (index === this.options.marker.index) {
+									this.ctx.font = "bold " + this.ctx.font;
+								}
+							}
+
 							this.ctx.textBaseline = (isRotated) ? "middle" : this.options.position === "top" ? "bottom" : "top";
 							this.ctx.fillText(label, 0, 0);
 							this.ctx.restore();
