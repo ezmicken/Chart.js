@@ -674,6 +674,18 @@ module.exports = function(Chart) {
 					context.stroke();
 				}
 
+				if (options.marker) {
+					if (index === options.marker.index) {
+						context.save();
+						context.moveTo(itemToDraw.labelX, chartArea.top);
+						context.lineTo(itemToDraw.labelX, chartArea.bottom);
+						context.lineWidth = options.marker.width || context.lineWidth;
+						context.strokeStyle = options.marker.color || context.strokeStyle;
+						context.stroke();
+						context.restore();
+					}
+ 				}
+
 				if (optionTicks.display) {
 					context.save();
 					context.translate(itemToDraw.labelX, itemToDraw.labelY);
@@ -681,6 +693,12 @@ module.exports = function(Chart) {
 					context.font = tickLabelFont;
 					context.textBaseline = itemToDraw.textBaseline;
 					context.textAlign = itemToDraw.textAlign;
+
+					if (options.marker) {
+						if (index === options.marker.index) {
+							context.font = "bold " + context.font;
+						}
+					}
 
 					var label = itemToDraw.label;
 					if (helpers.isArray(label)) {
@@ -712,7 +730,7 @@ module.exports = function(Chart) {
 					scaleLabelY = me.top + ((me.bottom - me.top) / 2);
 					rotation = isLeft ? -0.5 * Math.PI : 0.5 * Math.PI;
 				}
-				
+
 				context.save();
 				context.translate(scaleLabelX, scaleLabelY);
 				context.rotate(rotation);
