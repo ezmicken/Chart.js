@@ -649,7 +649,8 @@ module.exports = function(Chart) {
 					rotation: -1 * labelRotationRadians,
 					label: label,
 					textBaseline: textBaseline,
-					textAlign: textAlign
+					textAlign: textAlign,
+					index: index,
 				});
 			});
 
@@ -675,7 +676,7 @@ module.exports = function(Chart) {
 				}
 
 				if (options.marker) {
-					if (index === options.marker.index) {
+					if (itemToDraw.index === options.marker.index) {
 						context.save();
 						context.moveTo(itemToDraw.labelX, chartArea.top);
 						context.lineTo(itemToDraw.labelX, chartArea.bottom);
@@ -695,7 +696,7 @@ module.exports = function(Chart) {
 					context.textAlign = itemToDraw.textAlign;
 
 					if (options.marker) {
-						if (index === options.marker.index) {
+						if (itemToDraw.index === options.marker.index) {
 							context.font = "bold " + context.font;
 						}
 					}
